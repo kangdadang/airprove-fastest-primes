@@ -1,4 +1,6 @@
-// Generator for primes.bin: all primes <= 5,000,000 as little-endian uint32.
+// Generator for primes.bin / primes.b64: all primes <= 5,000,000 as
+// little-endian uint32. primes.b64 is the same bytes base64-encoded as
+// plain text, so the table can live in the repo through a text-only push.
 // Run: node gen_table.mjs
 // Verifies the table against the known pi(x) values from the challenge
 // cases.json plus pi(5,000,000) = 348,513.
@@ -27,6 +29,8 @@ const buf = Buffer.alloc(primes.length * 4);
 for (let i = 0; i < primes.length; i++) buf.writeUInt32LE(primes[i], i * 4);
 fs.writeFileSync('primes.bin', buf);
 console.log('wrote primes.bin:', buf.length, 'bytes');
+fs.writeFileSync('primes.b64', buf.toString('base64'));
+console.log('wrote primes.b64:', buf.toString('base64').length, 'chars');
 
 // verify counts by binary search over the table
 function pi(x) {
